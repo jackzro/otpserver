@@ -16,7 +16,6 @@ export class AuthService {
   ) {}
   async validateUserCreds(username: string, password: string): Promise<any> {
     const user = await this.userSmsService.findUsername(username);
-    console.log('user', user);
     if (!user[0])
       throw new BadRequestException({
         error: 'username is not registered !!!',
