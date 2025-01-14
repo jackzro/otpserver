@@ -30,11 +30,15 @@ export class SentController {
       //@ts-ignore
       start: `${createSentDto.start.year}-${
         createSentDto.start.month < 10 ? '0' : ''
-      }${createSentDto.start.month}-${createSentDto.start.day}`,
+      }${createSentDto.start.month}-${createSentDto.start.day < 10 ? '0' : ''}${
+        createSentDto.start.day
+      }`,
       //@ts-ignore
       end: `${createSentDto.end.year}-${
         createSentDto.end.month < 10 ? '0' : ''
-      }${createSentDto.end.month}-${createSentDto.end.day}`,
+      }${createSentDto.end.month}-${createSentDto.end.day < 10 ? '0' : ''}${
+        createSentDto.end.day
+      }`,
     });
   }
 

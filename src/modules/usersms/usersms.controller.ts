@@ -33,7 +33,6 @@ export class UsersmsController {
   balance(@Request() req) {
     //@ts-ignore
     const id = req.user.id;
-    console.log(id);
     return this.usersmsService.balance(id);
   }
 
