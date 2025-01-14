@@ -17,6 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
               console.log('temp', temp);
               result[temp[0]] = temp[1];
             });
+            console.log('Result', result);
             return result['nextauth.token'];
           } catch (error) {
             return error;
