@@ -10,9 +10,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         (request: Request) => {
           try {
             const secretToken = request.headers.cookie.split('; ');
+            console.log('secret', secretToken);
             let result = {};
             secretToken.forEach((item) => {
               const temp = item.split('=');
+              console.log('temp', temp);
               result[temp[0]] = temp[1];
             });
             return result['nextauth.token'];
