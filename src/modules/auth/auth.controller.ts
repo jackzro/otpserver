@@ -15,14 +15,15 @@ import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-  @UseGuards(LocalAuthGuard)
+
   @Post('login')
+  @UseGuards(LocalAuthGuard)
   async login(@Res() res: Response, @Request() req): Promise<any> {
     const data = await this.authService.generateToken(req.user);
-    res.cookie('token', data.access_token, {
-      httpOnly: true,
-      sameSite: 'none', // For cross-origin requests
-    });
+    // res.cookie('token', data.access_token, {
+    //   httpOnly: true,
+    //   sameSite: 'none', // For cross-origin requests
+    // });
     return data;
   }
 
