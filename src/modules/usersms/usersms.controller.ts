@@ -29,7 +29,7 @@ export class UsersmsController {
   }
 
   @Get('balance')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   balance(@Request() req) {
     //@ts-ignore
     const id = req.user.id;
