@@ -20,8 +20,8 @@ import { GetUser } from './sent.decorator';
 export class SentController {
   constructor(private readonly sentService: SentService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Request() req, @Body() createSentDto: any) {
     //@ts-ignore
     const id = req.user.id;
@@ -42,8 +42,8 @@ export class SentController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findById(@Req() req: Request) {
     //@ts-ignore
     const id = req.user.id;
