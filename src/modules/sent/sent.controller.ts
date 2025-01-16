@@ -25,6 +25,7 @@ export class SentController {
   create(@Request() req, @Body() createSentDto: any) {
     //@ts-ignore
     const id = req.user.id;
+    console.log(id);
     return this.sentService.create({
       id: id,
       //@ts-ignore

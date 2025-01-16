@@ -10,6 +10,7 @@ export class SentService {
     const result = await entityManager.query(
       `SELECT date(time_create) as date, count(*) as row_count from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create)`,
     );
+    console.log('res', result);
     return result;
   }
 
