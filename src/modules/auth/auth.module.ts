@@ -12,11 +12,12 @@ import { UsersmsModule } from '../usersms/usersms.module';
 @Module({
   imports: [
     forwardRef(() => UsersmsModule),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('SECRET'),
+        global: true,
         // signOptions: {
         //   expiresIn: '1h',
         // },

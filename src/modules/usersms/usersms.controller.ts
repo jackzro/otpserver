@@ -28,8 +28,8 @@ export class UsersmsController {
     return this.usersmsService.login(username, password);
   }
 
-  @Get('balance')
   @UseGuards(JwtAuthGuard)
+  @Get('balance')
   balance(@Request() req) {
     //@ts-ignore
     const id = req.user.id;
