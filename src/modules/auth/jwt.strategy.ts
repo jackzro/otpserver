@@ -7,25 +7,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       passReqToCallback: true,
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          console.log(request.headers);
-          try {
-            const secretToken = request.headers.cookie.split('; ');
-            console.log('secret', secretToken);
-            let result = {};
-            secretToken.forEach((item) => {
-              const temp = item.split('=');
-              console.log('temp', temp);
-              result[temp[0]] = temp[1];
-            });
-            console.log('Result', result);
-            return result['nextauth.token'];
-          } catch (error) {
-            return error;
-          }
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // jwtFromRequest: ExtractJwt.fromExtractors([
+      //   (request: Request) => {
+      //     console.log(request.headers);
+      //     try {
+      //       const secretToken = request.headers.cookie.split('; ');
+      //       console.log('secret', secretToken);
+      //       let result = {};
+      //       secretToken.forEach((item) => {
+      //         const temp = item.split('=');
+      //         console.log('temp', temp);
+      //         result[temp[0]] = temp[1];
+      //       });
+      //       console.log('Result', result);
+      //       return result['nextauth.token'];
+      //     } catch (error) {
+      //       return error;
+      //     }
+      //   },
+      // ]),
       secretOrKey: appConfig().appSecret,
     });
   }
