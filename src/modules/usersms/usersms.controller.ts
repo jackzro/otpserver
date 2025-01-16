@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Req,
 } from '@nestjs/common';
 import { UsersmsService } from './usersms.service';
 import { CreateUsersmDto } from './dto/create-usersm.dto';
@@ -26,6 +27,15 @@ export class UsersmsController {
   @Post('login')
   login(@Body() username: string, password: string) {
     return this.usersmsService.login(username, password);
+  }
+
+  @Post('example')
+  exampleHandler(@Req() req: Request, @Body() body: any) {
+    console.log('Headers:', req.headers);
+    console.log('Authorization Header:', req.headers['authorization']);
+    console.log('Body:', body);
+
+    return { message: 'Headers received' };
   }
 
   @UseGuards(JwtAuthGuard)
