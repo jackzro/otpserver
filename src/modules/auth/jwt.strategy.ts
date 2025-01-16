@@ -8,6 +8,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
+          console.log(request);
           try {
             const secretToken = request.headers.cookie.split('; ');
             console.log('secret', secretToken);
