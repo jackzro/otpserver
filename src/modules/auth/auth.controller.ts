@@ -11,12 +11,12 @@ export class AuthController {
   @Post('login')
   async login(@Res() res: Response, @Request() req): Promise<any> {
     const user = await this.authService.generateToken(req.user);
-    res.cookie('nextauth.token', user.access_token, {
-      // httpOnly: true,
-      // secure: true, // Ensure this is true for HTTPS
-      sameSite: 'none', // Required for cross-origin cookies
-    });
-    return;
+    // res.cookie('nextauth.token', user.access_token, {
+    //   // httpOnly: true,
+    //   // secure: true, // Ensure this is true for HTTPS
+    //   sameSite: 'lax', // Required for cross-origin cookies
+    // });
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)
