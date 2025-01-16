@@ -6,9 +6,10 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
+      passReqToCallback: true,
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          console.log(request);
+          console.log(request.headers);
           try {
             const secretToken = request.headers.cookie.split('; ');
             console.log('secret', secretToken);
