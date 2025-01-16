@@ -29,6 +29,7 @@ export class AuthService {
   tokenbuild(data: any) {}
 
   generateToken(user: any) {
+    console.log('user', user);
     return {
       access_token: this.jwtService.sign({
         username: user.username,
