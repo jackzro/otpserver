@@ -12,6 +12,7 @@ async function bootstrap() {
       const allowedOrigins = [
         'http://16.78.223.213:3000',
         'http://dashboard.sms123.online',
+        'http://localhost:3000',
       ];
 
       // Allow requests with no origin (like mobile apps or Postman)
