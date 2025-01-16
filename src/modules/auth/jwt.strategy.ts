@@ -6,22 +6,12 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      passReqToCallback: true,
-      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          console.log(request.headers);
+          console.log(request.headers.authorization);
           try {
-            const secretToken = request.headers.cookie.split('; ');
-            console.log('secret', secretToken);
-            let result = {};
-            secretToken.forEach((item) => {
-              const temp = item.split('=');
-              console.log('temp', temp);
-              result[temp[0]] = temp[1];
-            });
-            console.log('Result', result);
-            return result['nextauth.token'];
+            const secretToken = request.headers.authorization.split(' ');
+            return secretToken[1];
           } catch (error) {
             return error;
           }
@@ -32,7 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('payload', payload);
     return {
       id: payload.sub,
       role: payload.role,

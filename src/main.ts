@@ -13,6 +13,8 @@ async function bootstrap() {
         'http://16.78.223.213:3000',
         'http://dashboard.sms123.online',
         'http://localhost:3000',
+        'http://192.168.0.100:3000',
+        'http://127.0.0.1:3000',
       ];
 
       // Allow requests with no origin (like mobile apps or Postman)
@@ -24,8 +26,8 @@ async function bootstrap() {
     },
 
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
   });
   await app.listen(3020);
 }

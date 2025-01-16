@@ -41,6 +41,7 @@ export class UsersmsController {
   @UseGuards(JwtAuthGuard)
   @Get('balance')
   balance(@Request() req) {
+    console.log(req.user, 'masukk');
     //@ts-ignore
     const id = req.user.id;
     return this.usersmsService.balance(id);
