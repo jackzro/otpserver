@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        'http://16.78.223.213:3000',
+        'http://108.136.225.23:3000',
         'http://dashboard.sms123.online',
         'http://localhost:3000',
         'http://192.168.0.100:3000',

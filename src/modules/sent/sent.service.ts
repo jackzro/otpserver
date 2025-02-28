@@ -8,7 +8,7 @@ export class SentService {
   async create(createSentDto: any) {
     const entityManager = getManager();
     const result = await entityManager.query(
-      `SELECT date(time_create) as date, count(*) as row_count from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create)`,
+      `SELECT date(time_create) as date, count(*) as row_count from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create) ORDER BY DATE(time_create) ASC`,
     );
     return result;
   }

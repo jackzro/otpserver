@@ -42,6 +42,14 @@ export class SentController {
     });
   }
 
+  @Post('voiceotp')
+  @UseGuards(JwtAuthGuard)
+  async sentVoiceOtp(@Req() req: Request) {
+    //@ts-ignore
+    const id = req.user.id;
+    return await this.sentService.findOne(id);
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard)
   async findById(@Req() req: Request) {
