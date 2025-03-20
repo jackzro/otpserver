@@ -13,6 +13,56 @@ export class SentService {
     return result;
   }
 
+  async report(createSentDto: any) {
+    const entityManager = getManager();
+    const result = await entityManager.query(
+      `SELECT * from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}'`,
+    );
+
+    const newRes = [];
+
+    function parseSMPPReport(report) {
+      let result = {};
+      let parts = report.split(/\s+/); // Split by whitespace
+
+      parts.forEach((part) => {
+        let [key, value] = part.split(':');
+        if (key && value !== undefined) {
+          result[key] = value;
+        }
+      });
+
+      newRes.push(JSON.parse(JSON.stringify(result, null, 2)));
+
+      return JSON.parse(JSON.stringify(result, null, 2));
+
+      return JSON.stringify(result, null, 2);
+    }
+
+    result.map((res) => {
+      if (res.response.response_dr === false) {
+        return;
+      } else {
+        parseSMPPReport(res.response.response_dr.short_message.message);
+      }
+    });
+
+    let statCount = newRes.reduce((acc, obj) => {
+      acc[obj.stat] = (acc[obj.stat] || 0) + 1;
+      return acc;
+    }, {});
+
+    // let jsonReport = parseSMPPReport(
+    //   result[1].response.response_dr.short_message.message,
+    // );
+
+    return statCount;
+
+    // return JSON.parse(result[1].response.response_dr.short_message.message);
+
+    // return result;
+  }
+
   async findAll() {
     const entityManager = getManager();
     const result = await entityManager.query(`SELECT * from trx_sent`);

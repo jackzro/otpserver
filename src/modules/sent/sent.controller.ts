@@ -42,11 +42,34 @@ export class SentController {
     });
   }
 
-  @Post('voiceotp')
+  @Post('report')
   @UseGuards(JwtAuthGuard)
-  async sentVoiceOtp(@Req() req: Request) {
+  report(@Request() req, @Body() createSentDto: any) {
     //@ts-ignore
     const id = req.user.id;
+    return this.sentService.report({
+      id: id,
+      //@ts-ignore
+      start: `${createSentDto.start.year}-${
+        createSentDto.start.month < 10 ? '0' : ''
+      }${createSentDto.start.month}-${createSentDto.start.day < 10 ? '0' : ''}${
+        createSentDto.start.day
+      }`,
+      //@ts-ignore
+      end: `${createSentDto.end.year}-${
+        createSentDto.end.month < 10 ? '0' : ''
+      }${createSentDto.end.month}-${createSentDto.end.day < 10 ? '0' : ''}${
+        createSentDto.end.day
+      }`,
+    });
+  }
+
+  @Post('voiceotp')
+  @UseGuards(JwtAuthGuard)
+  async sentVoiceOtp(@Req() req: Request, @Body() body: any) {
+    //@ts-ignore
+    const id = req.user.id;
+
     return await this.sentService.findOne(id);
   }
 
