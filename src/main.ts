@@ -15,6 +15,7 @@ async function bootstrap() {
         'http://localhost:3000',
         'http://192.168.0.100:3000',
         'http://127.0.0.1:3000',
+        'https://dashboard.sms123.online',
       ];
 
       // Allow requests with no origin (like mobile apps or Postman)
