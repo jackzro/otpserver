@@ -40,6 +40,7 @@ export class AuthService {
         dr: user.delivery_type,
         is_active: user.is_active,
         id: user.id,
+        type: user.api_type,
       },
     };
   }

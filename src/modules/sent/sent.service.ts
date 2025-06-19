@@ -8,9 +8,55 @@ export class SentService {
   async create(createSentDto: any) {
     const entityManager = getManager();
     const result = await entityManager.query(
-      `SELECT date(time_create) as date, count(*) as row_count from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create) ORDER BY DATE(time_create) ASC`,
+      `SELECT date(time_create) as date, count(*) as row_count, SUM( 
+    COALESCE(
+      (response::json -> 'response_dr' ->> 'callDurationInSeconds')::int, 
+      0
+    )
+  ) AS detik
+    from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create) ORDER BY DATE(time_create) ASC`,
     );
     return result;
+  }
+
+  async getUserAll() {
+    const entityManager = getManager();
+    const result = await entityManager.query(
+      `SELECT id, username, api_type FROM public.user WHERE username != 'admin'`,
+    );
+    return result;
+  }
+
+  async reportVO(createSentDto: any) {
+    const entityManager = getManager();
+    const result = await entityManager.query(
+      `SELECT * from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}'`,
+    );
+
+    let newRes = {
+      detik: 0,
+      error: 0,
+      success: 0,
+    };
+
+    result.map((res) => {
+      if (res.response.response_dr.status === 'ERROR') {
+        newRes.error += 1;
+      } else {
+        newRes.success += 1;
+      }
+      newRes.detik += Number(
+        res.response?.response_dr?.callDurationInSeconds ?? 0,
+      );
+    });
+    return newRes;
+
+    // let statCount = newRes.reduce((acc, obj) => {
+    //   acc[obj.stat] = (acc[obj.stat] || 0) + 1;
+    //   return acc;
+    // }, {});
+
+    // return statCount;
   }
 
   async report(createSentDto: any) {

@@ -20,12 +20,39 @@ import { GetUser } from './sent.decorator';
 export class SentController {
   constructor(private readonly sentService: SentService) {}
 
+  @Get('userall')
+  getAllUser() {
+    return this.sentService.getUserAll();
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Request() req, @Body() createSentDto: any) {
     //@ts-ignore
-    const id = req.user.id;
+    const id = createSentDto.id;
     return this.sentService.create({
+      id: id,
+      //@ts-ignore
+      start: `${createSentDto.start.year}-${
+        createSentDto.start.month < 10 ? '0' : ''
+      }${createSentDto.start.month}-${createSentDto.start.day < 10 ? '0' : ''}${
+        createSentDto.start.day
+      }`,
+      //@ts-ignore
+      end: `${createSentDto.end.year}-${
+        createSentDto.end.month < 10 ? '0' : ''
+      }${createSentDto.end.month}-${createSentDto.end.day < 10 ? '0' : ''}${
+        createSentDto.end.day
+      }`,
+    });
+  }
+
+  @Post('reportvo')
+  @UseGuards(JwtAuthGuard)
+  reportVO(@Request() req, @Body() createSentDto: any) {
+    //@ts-ignore
+    const id = createSentDto.id;
+    return this.sentService.reportVO({
       id: id,
       //@ts-ignore
       start: `${createSentDto.start.year}-${
@@ -46,7 +73,7 @@ export class SentController {
   @UseGuards(JwtAuthGuard)
   report(@Request() req, @Body() createSentDto: any) {
     //@ts-ignore
-    const id = req.user.id;
+    const id = createSentDto.id;
     return this.sentService.report({
       id: id,
       //@ts-ignore
