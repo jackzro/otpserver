@@ -13,9 +13,11 @@ export class SentService {
       (response::json -> 'response_dr' ->> 'callDurationInSeconds')::int, 
       0
     )
-  ) AS detik
+  ) AS detik,
+   SUM(CASE WHEN status = 'SUCCESS' THEN 1 ELSE 0 END) AS success_count
     from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' group by date(time_create) ORDER BY DATE(time_create) ASC`,
     );
+
     return result;
   }
 
