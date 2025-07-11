@@ -10,6 +10,7 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { SentModule } from './modules/sent/sent.module';
 import { UsersmsModule } from './modules/usersms/usersms.module';
 import { LoggerMiddleware } from './logger.middleware';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LoggerMiddleware } from './logger.middleware';
     ProjectsModule,
     SentModule,
     UsersmsModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

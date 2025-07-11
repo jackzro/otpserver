@@ -25,6 +25,12 @@ export class SentController {
     return this.sentService.getUserAll();
   }
 
+  @Post('voiceotp')
+  @UseGuards(JwtAuthGuard)
+  sentvoiceotp(@Request() req, @Body() createSentDto: any) {
+    return this.sentService.sendVoiceOtp(createSentDto);
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Request() req, @Body() createSentDto: any) {

@@ -2,9 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateSentDto } from './dto/create-sent.dto';
 import { UpdateSentDto } from './dto/update-sent.dto';
 import { getManager } from 'typeorm';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SentService {
+  constructor(
+    private readonly httpService: HttpService,
+    private configService: ConfigService,
+  ) {}
   async create(createSentDto: any) {
     const entityManager = getManager();
     const result = await entityManager.query(
@@ -19,6 +26,12 @@ export class SentService {
     );
 
     return result;
+  }
+  async sendVoiceOtp(data: any) {
+    const response = await firstValueFrom(
+      this.httpService.post(this.configService.get('VOICEOTP_URL'), data),
+    );
+    return response.data;
   }
 
   async getUserAll() {
