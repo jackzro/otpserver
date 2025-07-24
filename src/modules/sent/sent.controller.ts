@@ -20,6 +20,11 @@ import { GetUser } from './sent.decorator';
 export class SentController {
   constructor(private readonly sentService: SentService) {}
 
+  @Post('malamReport')
+  malamReport() {
+    return this.sentService.malamReport();
+  }
+
   @Get('userall')
   getAllUser() {
     return this.sentService.getUserAll();

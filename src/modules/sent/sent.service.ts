@@ -5,6 +5,7 @@ import { getManager } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
+import { error } from 'console';
 
 @Injectable()
 export class SentService {
@@ -42,12 +43,13 @@ export class SentService {
     return result;
   }
 
-  async reportVO(createSentDto: any) {
+  async malamReport() {
     const entityManager = getManager();
     const result = await entityManager.query(
-      `SELECT * from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}'`,
+      `SELECT * FROM trx_sent WHERE id_user = 12
+ AND time_create >= date_trunc('day', now()) - interval '1 day' - interval '3 hours'
+  AND time_create < date_trunc('day', now()) - interval '1 day' + interval '6 hours'`,
     );
-
     let newRes = {
       detik: 0,
       error: 0,
@@ -65,6 +67,35 @@ export class SentService {
       );
     });
     return newRes;
+  }
+
+  async reportVO(createSentDto: any) {
+    const entityManager = getManager();
+    const result = await entityManager.query(
+      `SELECT response->'response_dr'->>'status' AS status,COUNT(*) AS count from trx_sent WHERE id_user=${createSentDto.id} and time_create between '${createSentDto.start}' and '${createSentDto.end}' GROUP BY response->'response_dr'->>'status' ORDER BY count DESC`,
+    );
+
+    const resDetik = await entityManager.query(
+      `SELECT 
+  SUM( (response->'response_dr'->>'callDurationInSeconds')::int ) AS total_duration
+FROM trx_sent
+WHERE id_user = $1
+  AND time_create BETWEEN $2 AND $3
+`,
+      [createSentDto.id, createSentDto.start, createSentDto.end],
+    );
+
+    return {
+      detik: resDetik[0].total_duration,
+      success: result[0].count,
+      error: result[1].count,
+    };
+
+    // let newRes = {
+    //   detik: 0,
+    //   error: 0,
+    //   success: 0,
+    // };
 
     // let statCount = newRes.reduce((acc, obj) => {
     //   acc[obj.stat] = (acc[obj.stat] || 0) + 1;
