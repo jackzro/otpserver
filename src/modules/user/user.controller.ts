@@ -22,12 +22,7 @@ import { Response } from 'express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/token/add')
-  async addToken(@Body() addtoken) {
-    return this.userService.addTokenToAcc(addtoken);
-  }
-
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('/register')
   async doUserRegistration(
     // @Body() userRegister: UserRegisterRequestDto,
@@ -35,7 +30,10 @@ export class UserController {
     @Req() req,
   ) {
     try {
-      await this.userService.doUserRegistration(userRegister, req.user.role);
+      await this.userService.doUserRegistration(
+        userRegister,
+        userRegister.role,
+      );
       return 'The account successfully created !!!';
     } catch (error) {
       return error;
@@ -45,25 +43,6 @@ export class UserController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  async findOne(@Res({ passthrough: true }) response: Response, @Req() req) {
-    const user = await this.userService.getUserById(req.user.id);
-    const acc = await this.userService.getNumberofAcc(req.user.id);
-    return {
-      user: {
-        id: user.id,
-        role: user.role,
-        name: user.username,
-        companyName: user.companyName,
-        contactNumber: user.contactNumber,
-        projects: user.projects,
-        token: user.token,
-      },
-      acc,
-    };
   }
 
   @UseGuards(JwtAuthGuard)

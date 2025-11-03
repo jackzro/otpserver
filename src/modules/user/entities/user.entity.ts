@@ -10,7 +10,8 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserRoles } from '../enums/user.enum';
-import { Project } from 'src/modules/projects/entities/project.entity';
+import { NumberReceiver } from 'src/numbers/entities/number-receiver.entity';
+import { OtpRequest } from 'src/numbers/entities/otp-request.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -20,30 +21,12 @@ export class User extends BaseEntity {
   @Column()
   username: string;
 
-  @Column({
-    unique: true,
-    nullable: true,
-  })
-  email: string;
-
   @Column()
   password: string;
-
-  @Column()
-  companyName: string;
-
-  @Column({ default: 0 })
-  token: number;
-
-  @Column()
-  contactNumber: string;
 
   @Column({ type: 'enum', enum: UserRoles })
   @Column()
   role: UserRoles;
-
-  @OneToMany(() => Project, (projects) => projects.user)
-  projects: Project[];
 
   @Column({ default: '0' })
   createdBy: string;
@@ -53,6 +36,15 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => OtpRequest, (otp) => otp.sender)
+  sentOtps: OtpRequest[];
+
+  @OneToMany(() => OtpRequest, (otp) => otp.receiver)
+  receivedOtps: OtpRequest[];
+
+  @OneToMany(() => NumberReceiver, (nr) => nr.receiver)
+  numberReceivers: NumberReceiver[];
 
   @BeforeInsert()
   async setPassword(password: string) {

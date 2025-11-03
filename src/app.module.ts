@@ -6,11 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfigAsync } from './config/typeorm.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { ProjectsModule } from './modules/projects/projects.module';
-import { SentModule } from './modules/sent/sent.module';
-import { UsersmsModule } from './modules/usersms/usersms.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { HttpModule } from '@nestjs/axios';
+import { NumbersModule } from './numbers/numbers.module';
 
 @Module({
   imports: [
@@ -18,10 +16,8 @@ import { HttpModule } from '@nestjs/axios';
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     AuthModule,
     UserModule,
-    ProjectsModule,
-    SentModule,
-    UsersmsModule,
     HttpModule,
+    NumbersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -18,16 +18,13 @@ export class UserService {
   ): Promise<User> {
     const user = new User();
     user.username = userRegister.username;
-    user.email = userRegister.email;
     user.password = userRegister.password;
-    user.companyName = userRegister.companyName;
-    user.contactNumber = userRegister.contactNumber;
     user.createdBy = userRegister.createdBy;
-    if (role === 'admin') {
-      user.role = UserRoles.RESELLER;
+    if (role === 'sender') {
+      user.role = UserRoles.SENDER;
     }
-    if (role === 'reseller') {
-      user.role = UserRoles.ACCOUNT;
+    if (role === 'receiver') {
+      user.role = UserRoles.RECEIVER;
     }
 
     return await user.save();
@@ -40,6 +37,7 @@ export class UserService {
   }
 
   async getUserByUsername(username: string) {
+    console.log(username);
     return await this.userRepository.findOne({ where: { username } });
   }
 
@@ -57,24 +55,6 @@ export class UserService {
     return acc;
   }
 
-  async addTokenToAcc(data) {
-    const userFrom = await this.getUserById(data.From);
-    const userTo = await this.getUserById(data.To);
-    if (userFrom.token < data.token) {
-      throw new HttpException(
-        'Your Tokens are Insufficient',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-    await this.userRepository.update(data.To, {
-      token: Number(userTo.token) + Number(data.token),
-    });
-    await this.userRepository.update(data.From, {
-      token: Number(userFrom.token) - Number(data.token),
-    });
-    return 'Successfully add The Token';
-  }
-
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -88,12 +68,6 @@ export class UserService {
   }
 
   async update(id, updateUserDto: UpdateUserDto) {
-    await this.userRepository.update(id, {
-      username: updateUserDto.username,
-      companyName: updateUserDto.companyName,
-      contactNumber: updateUserDto.contactNumber,
-      email: updateUserDto.email,
-    });
     return `Update User is successfully !!!`;
   }
 
