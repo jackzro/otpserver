@@ -33,6 +33,7 @@ export class NumbersService {
     const phone_number = new PhoneNumber();
     phone_number.phone_number = createNumberDto.number;
     phone_number.createdBy = req;
+
     const saved = await phone_number.save();
 
     const platform = await this.appRepository.find();
@@ -43,7 +44,7 @@ export class NumbersService {
         app: app,
       });
 
-      return await this.otpRequestRepository.save(otpReq);
+      await this.otpRequestRepository.save(otpReq);
     });
 
     return 'This action adds a new number';

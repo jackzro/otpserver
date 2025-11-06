@@ -20,8 +20,11 @@ export class NumbersController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Body() createNumberDto: CreateNumberDto, @Req() req) {
-    return this.numbersService.create(createNumberDto, req.user.id);
+  async create(@Body() createNumberDto: CreateNumberDto, @Req() req) {
+    const mes = await this.numbersService.create(createNumberDto, req.user.id);
+    return {
+      message: mes,
+    };
   }
 
   @Post('sendotp')
